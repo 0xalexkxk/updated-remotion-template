@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "remotion studio",
     "studio": "remotion studio --port 3333",
-    "render": "remotion render src/index.ts PumpFunScreen out/PumpFunScreen.mp4",
+    "make": "node scripts/make.mjs",
+    "render": "node scripts/render.mjs",
+    "render:default": "remotion render src/index.ts PumpFunScreen out/PumpFunScreen.mp4",
     "lint": "tsc",
     "fetch": "node scripts/pumpfun/fetch.mjs",
     "fetch:vibe": "node scripts/vibe/fetch.mjs",

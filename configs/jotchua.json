@@ -1,0 +1,40 @@
+{
+  "name": "Jotchua",
+  "ticker": "Jotchua",
+  "avatar": "jotchua-avatar.jpg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Captures the LIVE PUMP MOMENT — but with a LONG flat history visible on the left, matching the reference dexscreener chart (token sat near $0 for ~18 hours then ripped to $4M).",
+
+  "history": {
+    "launchMcap": 50000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 50000 },
+      { "frac": 0.20, "mcap": 60000 },
+      { "frac": 0.45, "mcap": 80000 },
+      { "frac": 0.65, "mcap": 90000 },
+      { "frac": 0.78, "mcap": 150000 },
+      { "frac": 0.85, "mcap": 350000 },
+      { "frac": 0.92, "mcap": 700000 },
+      { "frac": 0.97, "mcap": 950000 },
+      { "frac": 1.00, "mcap": 1000000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 1.80 },
+      { "frac": 0.30, "mult": 1.50 },
+      { "frac": 0.55, "mult": 2.80 },
+      { "frac": 0.75, "mult": 2.40 },
+      { "frac": 1.00, "mult": 4.00 }
+    ]
+  },
+
+  "poolLiquidity": 800000
+}

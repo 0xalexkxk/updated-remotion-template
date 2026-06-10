@@ -1,5 +1,7 @@
 # vibe-twitter-video-engine — AI rules
 
+**👉 Read [`HANDOFF.md`](HANDOFF.md) first** — it explains the user-facing workflow (chart screenshot → config → MP4) and the two golden rules. This file (`remotion.md`) covers engine internals and Remotion-specific patterns.
+
 Canonical instruction file for Claude Code, Cursor, Codex, and any other agent working this repo. One Remotion composition turns one real token into one pump-screen video. Read this before writing code.
 
 `remotion` + `@remotion/cli` + `@remotion/google-fonts` all pinned at **4.0.438** — keep them in lockstep. React **19.2.3**, TypeScript **5.9.3**. The only build gate is `npm run lint` (`tsc`). Run it before claiming a change works.
@@ -9,6 +11,77 @@ Canonical instruction file for Claude Code, Cursor, Codex, and any other agent w
 One composition: **`PumpFunScreen`** — a pixel-clone of the pump.fun / Axiom mobile token screen, replaying a real coin's parabolic run-up. **1080×1920 portrait, 60fps.** Real OHLC backbone, synthetic live-edge motion, a hand-held parasite camera. The whole thing is data-driven: drop a token in, get a video out.
 
 This engine renders one continuous live screen, not a cut sequence. There is no second composition. If you reach for captions, voiceover, or scene transitions, you are probably solving the wrong problem.
+
+## 🔥 THE CORE PRINCIPLE — capture the PUMP moment, not the aftermath
+
+**This is the single most important rule when building configs in `configs/<name>.json`.**
+
+When a user provides a reference chart screenshot, they want to replay the **moment the pump happened** — pretending we hit RECORD at the exact instant the price ripped. They do NOT want to see the current settled price chopping around its post-pump consolidation.
+
+### What this means concretely
+
+If the reference chart shows a token that pumped from **$1M → $4M → settled at $3.5M**:
+
+| ❌ WRONG (aftermath) | ✅ RIGHT (pump moment) |
+|---|---|
+| `history.pattern` traces the full arc up to $3.5M | `history.pattern` shows accumulation up to ~$1M |
+| `livePump.anchors` chop around 1.0x (0.97x–1.05x) | `livePump.anchors` go from 1.00x → 4.00x — the actual pump |
+| The clip shows boring sideways action at $3.5M | The clip shows the price RIP from $1M to $4M live |
+| Peak counter slowly creeps with chop | Peak counter explodes from 1x to 4x in real time |
+
+### How to encode it
+
+The `history` section is the **pre-pump setup** (accumulation, build-up). It ends where the pump begins.
+The `livePump.anchors` is the **pump itself**, with the final `mult` matching the chart's peak.
+
+```json
+"history": {
+  "launchMcap": 200000,
+  "pattern": [
+    { "frac": 0.00, "mcap": 200000 },
+    { "frac": 0.70, "mcap": 1000000 },     // build-up
+    { "frac": 1.00, "mcap": 1000000 }      // ← clip starts here, at the launchpad
+  ]
+},
+"livePump": {
+  "anchors": [
+    { "frac": 0.00, "mult": 1.00 },        // $1M (= history endpoint)
+    { "frac": 0.55, "mult": 2.80 },        // breakout to $2.8M
+    { "frac": 1.00, "mult": 4.00 }         // ← target peak from the chart
+  ]
+}
+```
+
+### Self-check before saving a config
+
+- [ ] Does `livePump.anchors` end with a `mult ≥ 1.5x`? If not, the clip is showing chop, not a pump.
+- [ ] Does the final `mult` × `history`'s last mcap match the chart's visible peak?
+- [ ] Is the `history.pattern` showing pre-pump accumulation, not the full chart arc?
+- [ ] **Does the chart history reflect the FULL story?** If the user shared a wide-zoom chart (e.g. dexscreener showing 24h of flat → ramp → pump), the `history` must encode the same long flat → acceleration arc, not just the recent few candles.
+
+`scripts/make.mjs` enforces these checks at config-load time and refuses to render a "consolidation clip" unless `allowConsolidation: true` is explicitly set in the config.
+
+### Rule: full-chart reference → full-story video
+
+If the user shares a chart that shows a long history (hours/days of flat,
+build-up, then the pump), the video MUST tell that same story:
+
+1. **Long flat at the launch floor on the left** — encode it with many anchor
+   points hovering around `launchMcap` (e.g. `frac 0.00–0.65 stays near $0`).
+2. **Acceleration phase** — anchors ramping up steadily (e.g. `frac 0.78 → 1.00`
+   goes from $150K → $1M).
+3. **Pre-pump consolidation** — the final history anchor sits at the launchpad
+   where the god candle will open.
+4. **THE PUMP** — `livePump.anchors` rip from 1.00x to the chart's peak.
+
+Bump `history.candleCount` to **180–260** so the long flat is actually visible.
+The engine's `MAX_CTX` is 260 and `BASE_VIEW` is 240 — keep history within those
+budgets or widen them together.
+
+A short-history reference (just the last hour, no long flat) maps to fewer
+candles (~90). Match the **zoom level of the screenshot**:
+- Dexscreener daily view → 220+ candles, long flat history
+- pump.fun "last hour" view → 80–100 candles, recent action only
 
 ## Replicating a reference — compare, never describe from memory
 

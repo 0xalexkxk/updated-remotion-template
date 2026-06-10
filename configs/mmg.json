@@ -1,0 +1,39 @@
+{
+  "name": "Millions Must Go",
+  "ticker": "MMG",
+  "avatar": "mmg-avatar.jpg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Replicates the dexscreener pump from $28K base → $400K peak → settle at $341K (12.2x ending, 14.3x peak). Chart shows pre-pump flat at $25K-$28K, then rip up with one pullback, then breakout to ATH, then small pullback to current price.",
+
+  "history": {
+    "launchMcap": 20000,
+    "candleCount": 180,
+    "pattern": [
+      { "frac": 0.00, "mcap": 20000 },
+      { "frac": 0.30, "mcap": 22000 },
+      { "frac": 0.60, "mcap": 24000 },
+      { "frac": 0.85, "mcap": 26000 },
+      { "frac": 1.00, "mcap": 28000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.10, "mult": 1.80 },
+      { "frac": 0.20, "mult": 1.40 },
+      { "frac": 0.35, "mult": 3.50 },
+      { "frac": 0.50, "mult": 5.50 },
+      { "frac": 0.65, "mult": 10.00 },
+      { "frac": 0.80, "mult": 14.30 },
+      { "frac": 0.90, "mult": 11.00 },
+      { "frac": 1.00, "mult": 12.20 }
+    ]
+  },
+
+  "poolLiquidity": 100000
+}

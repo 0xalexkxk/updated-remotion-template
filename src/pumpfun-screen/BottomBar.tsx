@@ -58,7 +58,7 @@ export const BottomBar: React.FC = () => (
       }}
     >
       <GemIcon size={26} color={C.bg} />
-      Buy
+      买入
     </div>
     <div
       style={{
@@ -77,7 +77,7 @@ export const BottomBar: React.FC = () => (
       }}
     >
       <SearchIcon size={24} />
-      Search
+      搜索
     </div>
   </div>
 );

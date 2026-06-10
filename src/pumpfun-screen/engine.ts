@@ -29,7 +29,7 @@ import type {
  * ------------------------------------------------------------------ */
 
 export const PREV_TAIL_SEC = 5;
-export const WINDOW_SEC = 24;
+export const WINDOW_SEC = 15;
 
 /** The "god minute": bucket ticks by floor(t/60); among buckets with at least
  *  ~2 ticks, pick the one with the largest intra-minute move (max/min, with
@@ -186,12 +186,13 @@ export function buildTimeline(data: ChartData, cfg: EngineConfig): FrameView[] {
     pumpWindow: { startT: T0, endT: T1, basePrice: winBase, peakPrice: winPeak },
   });
 
+
   // ---- Static context = real candles whose minute is BEFORE the live region.
   // They render settled, packed one-per-slot to the left of the live area
   // (their irregular real spacing collapses into uniform history columns —
   // Axiom packs recent candles the same way). We keep the most recent ~46.
   const ctxAll = candles.filter((c) => Math.floor(c.t / 60) < minStart);
-  const MAX_CTX = 160;
+  const MAX_CTX = 260;
   const ctx = ctxAll.slice(Math.max(0, ctxAll.length - MAX_CTX));
   const ctxCount = ctx.length;
   // The launch base for the multiples: foot of the run we can see. Prefer the
@@ -285,13 +286,12 @@ export function buildTimeline(data: ChartData, cfg: EngineConfig): FrameView[] {
   let prevPrice = live[0].price;
   let prevPriceVelocity = 0; // tracks rising streak for burst logic
 
-  // Smoothed mcap for the HEADER display — eases toward the live mcap so the
-  // big number doesn't whip on every micro-tick. Real apps throttle the UI.
+  // Smoothed mcap for the HEADER display — light EMA only removes per-frame
+  // noise without lagging real moves. The sample/hold below quantises display
+  // updates to 0.4s so the number ticks like a real tape.
   let smoothMcap = live[0].price * mp;
-  const MCAP_SMOOTH = 0.018; // EMA toward live, but only sampled every TICK_FRAMES
-  // Display sample/hold — header & price pill only update every TICK_FRAMES
-  // (0.4s at 60fps), so the number ticks like a real tape instead of flickering.
-  const TICK_FRAMES = 24;
+  const MCAP_SMOOTH = 0.18; // light smoothing (~5-frame lag) — tracks real moves
+  const TICK_FRAMES = 24;   // sample/hold every 0.4s at 60fps
   let heldMcap = live[0].price * mp;
   let heldUp = true; // green/red direction sampled at the same cadence
   let prevSampleMcap = heldMcap; // previous sampled value → drives heldUp
@@ -383,8 +383,8 @@ export function buildTimeline(data: ChartData, cfg: EngineConfig): FrameView[] {
     // Show a lot of context — the flat history on the left needs to be visible.
     // Camera zoom < 1 zooms IN (fewer candles, focus on live edge),
     //              > 1 zooms OUT (more history visible).
-    const BASE_VIEW = 145;
-    const viewCount = Math.max(35, Math.min(200, Math.round(BASE_VIEW * cam.zoom)));
+    const BASE_VIEW = 240;
+    const viewCount = Math.max(40, Math.min(320, Math.round(BASE_VIEW * cam.zoom)));
     const godX = Math.max(
       2,
       Math.min(Math.max(2, viewCount - 4), BASE_GOD_X + cam.pan),
@@ -481,15 +481,16 @@ export function buildTimeline(data: ChartData, cfg: EngineConfig): FrameView[] {
       if (synthFills.length > 8) synthFills.length = 8; // keep last ~8
       printedThisFrame = true;
       // Interval scales with price velocity — a real pump has a HOT tape.
-      // ripping hard: 0.05–0.18s (~8–10 fills/sec)
-      // rising:       0.15–0.40s (~3–5 fills/sec)
-      // chop/sell:    0.30–0.70s (~1.5–3 fills/sec)
+      // Rates bumped ~15% vs prior tuning (shorter gaps = more transactions).
+      // ripping hard: 0.04–0.16s (~10–12 fills/sec)
+      // rising:       0.13–0.35s (~3.5–6 fills/sec)
+      // chop/sell:    0.26–0.61s (~1.7–3.5 fills/sec)
       const ripping = prevPriceVelocity > fps * 0.4;
       const interval = ripping
-        ? 0.05 + tapeRng() * 0.13
+        ? 0.04 + tapeRng() * 0.12
         : tickUp
-          ? 0.15 + tapeRng() * 0.25
-          : 0.3 + tapeRng() * 0.4;
+          ? 0.13 + tapeRng() * 0.22
+          : 0.26 + tapeRng() * 0.35;
       nextFillRealT += interval;
     }
     // Mcap pulse: a new fill this frame == a trade printed → spike, else decay.
@@ -535,15 +536,15 @@ export function buildTimeline(data: ChartData, cfg: EngineConfig): FrameView[] {
       ladder: buildLadder(dispMin, dispMax),
       candles: viewCandles,
       viewCount,
-      // Sample/held value for the price pill + dashed line — only ticks every
-      // TICK_FRAMES (0.4s). Candles themselves still use real OHLC for shape.
-      liveMcap: heldMcap,
-      liveUp: heldUp,
+      // Raw live mcap — pill + dashed line stay PERFECTLY in sync with the
+      // forming candle's close (header still uses heldMcap so it doesn't flicker).
+      liveMcap,
+      liveUp: tickUp,
       liveX,
       // Entry marker — anchor to ~92% from the right edge so it stays at the
       // far left of the visible chart regardless of camera pan.
       entry: { mcap: launchMcap, vx: viewCount * 0.92 },
-      tfLabel: "15s",
+      tfLabel: "1分钟",
       axisTimes,
       tape,
       mcapPulse,

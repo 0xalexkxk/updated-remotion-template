@@ -3,7 +3,7 @@ import { C, FONT_MONO, FONT_UI } from "./theme";
 import { mcapLabel } from "./engine";
 import type { FrameView } from "./types";
 
-const ageLabel = (s: number) => (s <= 0 ? "now" : `${s}s`);
+const ageLabel = (s: number) => (s <= 0 ? "刚刚" : `${s}秒`);
 
 const usdLabel = (v: number) =>
   v >= 1000 ? `$${Math.round(v).toLocaleString("en-US")}` : `$${v.toFixed(2)}`;
@@ -56,7 +56,7 @@ export const TradeTape: React.FC<{ view: FrameView }> = ({ view }) => {
         <span
           style={{ color: C.text, fontFamily: FONT_UI, fontSize: 26, fontWeight: 600 }}
         >
-          Trades
+          交易
         </span>
         <span
           style={{
@@ -68,20 +68,20 @@ export const TradeTape: React.FC<{ view: FrameView }> = ({ view }) => {
             fontSize: 26,
           }}
         >
-          Holders ({view.holders.toLocaleString()})
-          <span style={{ fontSize: 22 }}>All ⇅</span>
+          持有人 ({view.holders.toLocaleString()})
+          <span style={{ fontSize: 22 }}>全部 ⇅</span>
         </span>
         <span style={{ color: C.textMute, fontFamily: FONT_UI, fontSize: 26 }}>
-          Top Trades
+          热门交易
         </span>
       </div>
 
       {/* column heads */}
       <div style={{ display: "flex", padding: "14px 0 6px" }}>
-        <Cell flex={1.1} color={C.textFaint}>Age ⌄</Cell>
-        <Cell flex={1.6} color={C.textFaint}>USD ⇄</Cell>
-        <Cell flex={1.4} color={C.textFaint}>Market Cap</Cell>
-        <Cell flex={1.7} align="right" color={C.textFaint}>Trader ▽</Cell>
+        <Cell flex={1.1} color={C.textFaint}>时间 ⌄</Cell>
+        <Cell flex={1.6} color={C.textFaint}>美元 ⇄</Cell>
+        <Cell flex={1.4} color={C.textFaint}>市值</Cell>
+        <Cell flex={1.7} align="right" color={C.textFaint}>交易者 ▽</Cell>
       </div>
 
       {/* rows */}

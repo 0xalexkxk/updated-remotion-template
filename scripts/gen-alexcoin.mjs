@@ -1,160 +1,133 @@
-// Generates a synthetic Alexcoin dataset:
-//   - LONG flat history at ~$10K mcap (~100 candles of chop)
-//   - S-curve ramp from $10K → ~$700K (~40 candles)
-//   - During the LIVE clip window: ~40% move with realistic resistance
-//     (hit a level, get rejected, retest, break through, retest as support)
+// Trillion: LIVE pump from $200K → $400K (2x) during a 20-second clip.
+//   - Historical context: accumulation chop, ending at ~$200K mcap
+//   - Live god minute: actually pumps 2x with realistic micro-structure
+//     (initial rip, brief pullback, breakout, top wick)
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const BASE_PRICE  = 0.000010;
-const MCAP_PER_PRICE = 10_000 / BASE_PRICE; // $10K @ base price
+const BASE_PRICE  = 0.00001;
+const MCAP_PER_PRICE = 50_000 / BASE_PRICE; // launch reference: $50K @ base price
 
 const NOW = Math.floor(Date.now() / 1000);
-
 const GOD_MINUTE_T = Math.floor((NOW - 90) / 60) * 60;
-const T0 = GOD_MINUTE_T - 5;
-const T1 = T0 + 24;
 
 function rand(min, max) { return min + Math.random() * (max - min); }
 function noise(pct)     { return 1 + rand(-pct, pct); }
 
-// ── candles ────────────────────────────────────────────────────────────
 const candles = [];
 
-// Phase A — flat chop at base price (~70% of the visible chart width)
-const FLAT_COUNT = 100;
-for (let i = 0; i < FLAT_COUNT; i++) {
-  const t = GOD_MINUTE_T - (FLAT_COUNT + 40) * 60 + i * 60;
-  const o = BASE_PRICE * noise(0.015);
-  const c = BASE_PRICE * noise(0.015);
-  const h = Math.max(o, c) * rand(1.002, 1.010);
-  const l = Math.min(o, c) * rand(0.990, 0.998);
-  candles.push({ t, o, h, l, c, v: rand(150, 600) });
+// ── Phase A — early accumulation $50K → ~$150K, 50 candles ───────────
+const ACC_COUNT = 50;
+for (let i = 0; i < ACC_COUNT; i++) {
+  const t = GOD_MINUTE_T - (ACC_COUNT + 40) * 60 + i * 60;
+  const drift = 1 + (i / ACC_COUNT) * 2.0; // 1.0x → 3.0x → $50K → $150K
+  const o = BASE_PRICE * drift * noise(0.05);
+  const c = BASE_PRICE * drift * noise(0.05);
+  const h = Math.max(o, c) * rand(1.005, 1.04);
+  const l = Math.min(o, c) * rand(0.96, 0.995);
+  candles.push({ t, o, h, l, c, v: rand(200, 1500) });
 }
 
-// Phase B — S-curve ramp from $10K → ~$120K (~12x).
-// Ramp ends at $120K — that's where the clip's god candle starts pumping.
-const RAMP_COUNT = 40;
-const RAMP_END_MULT = 12;
+// ── Phase B — pre-pump consolidation around $200K, 40 candles ─────────
+// The chart settles into a flat range right before the god-minute pump.
+const CONS_COUNT = 40;
 let prev = candles[candles.length - 1].c;
-const sigMin = 1 / (1 + Math.exp(3));
-const sigMax = 1 / (1 + Math.exp(-3));
-function rampMult(x) {
-  const sig = 1 / (1 + Math.exp(-6 * (x - 0.5)));
-  return 1 + ((sig - sigMin) / (sigMax - sigMin)) * (RAMP_END_MULT - 1);
-}
-for (let i = 1; i <= RAMP_COUNT; i++) {
-  const t = GOD_MINUTE_T - (RAMP_COUNT - i + 1) * 60;
-  const target = BASE_PRICE * rampMult(i / RAMP_COUNT);
+const targetCons = BASE_PRICE * 4.0; // $200K
+for (let i = 0; i < CONS_COUNT; i++) {
+  const t = GOD_MINUTE_T - CONS_COUNT * 60 + i * 60;
+  // Ease prev → targetCons over first 10 candles, then chop around it
+  const ease = Math.min(1, i / 10);
+  const center = prev * (1 - ease) + targetCons * ease;
   const o = prev;
-  const c = target * noise(0.025);
-  const h = Math.max(o, c) * rand(1.005, 1.05);
-  const l = Math.min(o, c) * rand(0.95, 0.998);
-  candles.push({ t, o, h, l, c, v: rand(1000, 30000) * (1 + i / 10) });
+  const c = center * noise(0.04);
+  const h = Math.max(o, c) * rand(1.005, 1.025);
+  const l = Math.min(o, c) * rand(0.975, 0.995);
+  candles.push({ t, o, h, l, c, v: rand(800, 4000) });
   prev = c;
 }
 
-const RAMP_END_PRICE = prev; // ~70x base
+const LIVE_START_PRICE = prev;  // ~$200K, where the god candle opens
+const LIVE_PEAK_PRICE  = BASE_PRICE * 8.0; // $400K target — true 2x
 
-// ── ticks ──────────────────────────────────────────────────────────────
+// ── ticks — sparse pre-window + dense god-minute ──────────────────────
 const ticks = [];
+const pumpStartT = GOD_MINUTE_T - (ACC_COUNT + CONS_COUNT) * 60;
 
-// Pre-window ramp ticks (~80, spread across the S-curve ramp)
-const rampStartT = GOD_MINUTE_T - RAMP_COUNT * 60;
-for (let i = 0; i < 80; i++) {
-  const frac = i / 79;
-  const t = rampStartT + Math.round(frac * RAMP_COUNT * 60);
-  const price = BASE_PRICE * rampMult(frac) * noise(0.02);
+// SPARSE: one tick per pre-window minute (godMinute() requires ≥2 to consider)
+for (let i = 0; i < ACC_COUNT + CONS_COUNT; i++) {
+  const t = pumpStartT + i * 60 + 30;
+  const cdl = candles[i];
   ticks.push({
-    t, price,
-    usd: rand(20, 800),
-    kind: Math.random() > 0.35 ? 'buy' : 'sell',
+    t,
+    price: cdl.c,
+    usd: rand(20, 500),
+    kind: Math.random() > 0.45 ? 'buy' : 'sell',
+  });
+}
+// 5 handoff ticks at GMT-30..GMT-10 → seed winBase ≈ $200K
+for (let i = 0; i < 5; i++) {
+  ticks.push({
+    t: GOD_MINUTE_T - 30 + i * 5,
+    price: LIVE_START_PRICE * noise(0.008),
+    usd: rand(80, 600),
+    kind: Math.random() > 0.5 ? 'buy' : 'sell',
   });
 }
 
-// God-minute ticks — REAL-CHART feel: ~12% move over 19s with smooth phases
-// and tiny Brownian micro-noise. Not a timelapse, not jerky.
-//   0-30%:  slow rally  +6%  (gentle accumulation, micro-chop)
-//   30-50%: pullback   -3%   (small rejection / liquidity sweep)
-//   50-85%: re-rally   +12%  (breakout above prior high)
-//   85-100%: cool-off   -2%  (small consolidation at the top)
-const PUMP_START = GOD_MINUTE_T;
-const PUMP_DUR   = 19;
-const startPrice = RAMP_END_PRICE;
-
-// Smoothstep — eased 0→1 transition (zero velocity at both ends).
-function smooth(t) {
-  const x = Math.max(0, Math.min(1, t));
-  return x * x * (3 - 2 * x);
-}
-
-function pumpPriceAt(frac) {
-  // 1:1 match of the reference video movement profile (measured from frames):
-  //   0-10%   (0-2s):    rip +10%        ($841K → $926K)
-  //   10-20%  (2-4s):    pullback -1.4%  ($926K → $913K)
-  //   20-30%  (4-6s):    push to peak    ($913K → $941K) — sets ATH
-  //   30-55%  (6-11s):   consolidate     (hold ~$940K, small chop)
-  //   55-75%  (11-15s):  big pullback    ($940K → $885K, -6%)
-  //   75-95%  (15-19s):  recovery        ($885K → $897K)
-  //   95-100%:           settle
+// ── God-minute pump ticks — $200K → $400K with realistic structure ────
+// Window covers [GMT-5, GMT+15] — the god candle has 15s to pump.
+// 0-15% (0-2s):    rip from 1.00x → 1.45x  ($200K → $290K)
+// 15-30% (2-5s):   small pullback to 1.30x ($260K)
+// 30-65% (5-10s):  breakout to 1.80x ($360K)
+// 65-85% (10-13s): retest to 1.60x ($320K)
+// 85-100% (13-15s): final push to 2.00x ($400K)
+const PUMP_DUR = 15;
+function pumpAt(frac) {
   const anchors = [
-    [0.00, 1.000],
-    [0.10, 1.100],   // initial rip
-    [0.20, 1.085],   // micro pullback
-    [0.30, 1.119],   // peak (sets ATH)
-    [0.55, 1.115],   // consolidation
-    [0.75, 1.052],   // big pullback
-    [0.95, 1.066],   // recovery
-    [1.00, 1.066],
+    [0.00, 1.00],
+    [0.15, 1.45],
+    [0.30, 1.30],
+    [0.65, 1.80],
+    [0.85, 1.60],
+    [1.00, 2.00],
   ];
   for (let i = 1; i < anchors.length; i++) {
     const [t0, v0] = anchors[i - 1];
     const [t1, v1] = anchors[i];
     if (frac <= t1) {
-      const local = smooth((frac - t0) / (t1 - t0));
-      return startPrice * (v0 + (v1 - v0) * local);
+      const local = (frac - t0) / (t1 - t0);
+      const s = local * local * (3 - 2 * local); // smoothstep
+      return v0 + (v1 - v0) * s;
     }
   }
-  return startPrice * anchors[anchors.length - 1][1];
+  return 2.00;
 }
 
-// Brownian micro-noise: small persistent random walk on top of the smooth path.
-// This is what makes a chart feel ALIVE — micro ticks within the trend.
-let brownian = 0;
-const BROWN_STEP = 0.0004; // ~0.04% step — small and smooth
-const BROWN_PULL = 0.08;   // stronger mean-reversion
-
-const PUMP_TICKS = 75; // fewer anchors → smoother interpolation between them
+const PUMP_TICKS = 80;
 for (let i = 0; i < PUMP_TICKS; i++) {
   const frac = i / (PUMP_TICKS - 1);
-  // Update brownian: random walk with mean reversion
-  brownian += (Math.random() - 0.5) * 2 * BROWN_STEP;
-  brownian -= brownian * BROWN_PULL; // pull toward 0
-  const smoothPrice = pumpPriceAt(frac);
-  const price = smoothPrice * (1 + brownian);
-  const t = PUMP_START + Math.round(frac * PUMP_DUR);
-  // Buy/sell bias follows the smooth trend direction (not the noise)
-  const dirSample = pumpPriceAt(Math.min(1, frac + 0.02)) - smoothPrice;
-  const buyProb = dirSample > 0 ? 0.68 : 0.40;
-  const kind = Math.random() < buyProb ? 'buy' : 'sell';
-  const usd  = rand(40, 3500) * (0.6 + frac * 1.0);
-  ticks.push({ t, price, usd, kind });
+  const price = LIVE_START_PRICE * pumpAt(frac) * noise(0.008);
+  const t = GOD_MINUTE_T + Math.round(frac * PUMP_DUR);
+  // Buy bias when smooth trend is rising
+  const dirSample = pumpAt(Math.min(1, frac + 0.04)) - pumpAt(frac);
+  const buyProb = dirSample > 0 ? 0.78 : 0.42;
+  ticks.push({
+    t, price,
+    usd: rand(60, 5000) * (0.6 + frac * 2),
+    kind: Math.random() < buyProb ? 'buy' : 'sell',
+  });
 }
 
-const peakPrice = pumpPriceAt(0.30); // peak at ~30% into the clip (+12%)
-
-// ── pumpWindow ─────────────────────────────────────────────────────────
 const pumpWindow = {
   startT:    GOD_MINUTE_T,
-  endT:      T1,
-  basePrice: BASE_PRICE,        // overall launch base ($10K)
-  peakPrice: peakPrice,          // peak reached during clip
+  endT:      GOD_MINUTE_T + 20,
+  basePrice: BASE_PRICE,
+  peakPrice: LIVE_PEAK_PRICE,
 };
 
-// ── assemble ───────────────────────────────────────────────────────────
 const data = {
   token: {
     name: 'Trillion',
@@ -162,8 +135,7 @@ const data = {
     avatar: 'trillion-avatar.png',
     mcapPerPrice: MCAP_PER_PRICE,
   },
-  // Big pool → small per-trade impact → smooth chart (not jittery)
-  pool: { liquidityUsd: 800000, reserveBase: null, reserveQuote: null },
+  pool: { liquidityUsd: 200_000, reserveBase: null, reserveQuote: null },
   candles,
   ticks,
   pumpWindow,
@@ -173,12 +145,9 @@ const data = {
 
 const outPath = path.join(__dirname, '../src/pumpfun-screen/data/active.json');
 fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
-const startMcap = startPrice * MCAP_PER_PRICE;
-const peakMcap  = peakPrice  * MCAP_PER_PRICE;
 console.log(`✅ Written to ${outPath}`);
-console.log(`   Candles:     ${candles.length} (${FLAT_COUNT} flat + ${RAMP_COUNT} ramp)`);
-console.log(`   Ticks:       ${ticks.length}`);
-console.log(`   Launch mcap: $${(BASE_PRICE * MCAP_PER_PRICE).toLocaleString()}`);
-console.log(`   Clip start:  $${Math.round(startMcap).toLocaleString()} (≈${Math.round(startPrice/BASE_PRICE)}x launch)`);
-console.log(`   Clip peak:   $${Math.round(peakMcap).toLocaleString()} (≈${Math.round(peakPrice/BASE_PRICE)}x launch)`);
-console.log(`   Move:        +${Math.round((peakPrice/startPrice - 1) * 100)}% during clip`);
+console.log(`   Candles:    ${candles.length} (${ACC_COUNT} accumulation + ${CONS_COUNT} consolidation)`);
+console.log(`   Ticks:      ${ticks.length}`);
+console.log(`   Live start: $${(LIVE_START_PRICE * MCAP_PER_PRICE / 1000).toFixed(0)}K`);
+console.log(`   Live peak:  $${(LIVE_PEAK_PRICE * MCAP_PER_PRICE / 1000).toFixed(0)}K  (2x during clip)`);
+console.log(`   Window:     20s on 1m timeframe`);

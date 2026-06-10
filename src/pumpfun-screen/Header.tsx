@@ -79,7 +79,7 @@ export const Header: React.FC<{ data: ChartData; view: FrameView }> = ({
           >
             {token.name}
             <span style={{ color: C.textMute, fontSize: 22, fontWeight: 400 }}>
-              1h
+              1小时
             </span>
             <span style={{ color: C.textMute, fontSize: 22 }}>⚑</span>
           </span>
@@ -121,7 +121,7 @@ export const Header: React.FC<{ data: ChartData; view: FrameView }> = ({
               lineHeight: 1,
             }}
           >
-            Peak
+            峰值
             <span style={{ fontSize: 22 }}>⇅</span>
           </span>
           <span

@@ -46,9 +46,9 @@ const TfRow: React.FC<{ tf: string }> = ({ tf }) => (
     >
       {tf}
     </span>
-    <span style={{ color: C.text, fontFamily: FONT_UI, fontSize: 24 }}>MCap</span>
+    <span style={{ color: C.text, fontFamily: FONT_UI, fontSize: 24 }}>市值</span>
     <span style={{ color: C.textFaint, fontFamily: FONT_UI, fontSize: 24 }}>
-      / Price
+      / 价格
     </span>
     <span style={{ marginLeft: "auto", color: C.textFaint, fontSize: 26, letterSpacing: 8 }}>
       ⚙ ⤴ ⤢
