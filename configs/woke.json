@@ -1,0 +1,39 @@
+{
+  "name": "Woke Mind Virus",
+  "ticker": "WOKE",
+  "avatar": "woke-avatar.jpeg",
+
+  "duration": 14,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "12.4x pump $70K → $870K. Tight-zoom dexscreener chart shows just the pump itself starting ~17:00. Initial rip to ~$500K, brief consolidation around $500-600K, then big breakout to $940K wick, settling at $870K. Dramatic candle gives the wick effect.",
+
+  "history": {
+    "launchMcap": 15000,
+    "candleCount": 90,
+    "pattern": [
+      { "frac": 0.00, "mcap": 15000 },
+      { "frac": 0.45, "mcap": 22000 },
+      { "frac": 0.75, "mcap": 35000 },
+      { "frac": 0.92, "mcap": 55000 },
+      { "frac": 1.00, "mcap": 70000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 4.50 },
+      { "frac": 0.28, "mult": 7.00 },
+      { "frac": 0.42, "mult": 8.50 },
+      { "frac": 0.55, "mult": 7.20 },
+      { "frac": 0.72, "mult": 11.00 },
+      { "frac": 0.85, "mult": 13.40 },
+      { "frac": 1.00, "mult": 12.40 }
+    ]
+  },
+
+  "poolLiquidity": 350000,
+  "dramaticCandle": true
+}

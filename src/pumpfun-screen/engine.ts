@@ -29,7 +29,7 @@ import type {
  * ------------------------------------------------------------------ */
 
 export const PREV_TAIL_SEC = 5;
-export const WINDOW_SEC = 15;
+export const WINDOW_SEC = 14;
 
 /** The "god minute": bucket ticks by floor(t/60); among buckets with at least
  *  ~2 ticks, pick the one with the largest intra-minute move (max/min, with

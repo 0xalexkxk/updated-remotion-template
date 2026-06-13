@@ -163,12 +163,46 @@ for (let i = 0; i < 5; i++) {
 const PUMP_DUR = cfg.duration - 5;
 const PUMP_TICKS = 80;
 const liveAnchors = cfg.livePump.anchors;
+
+// Dramatic candle mode: the price spikes high, dumps hard within the candle
+// body, then slowly recovers. The OUTER mults (anchors) define what the chart
+// will *settle* at; the dramatic mod adds an extra spike+dump+recover OVERLAY
+// that prints as a giant wick on the forming god candle.
+const dramatic = cfg.dramaticCandle === true;
+function dramaMod(frac) {
+  if (!dramatic) return 1.0;
+  // Drama curve (multiplier on the base anchor value at this frac):
+  //   0.00-0.25  ramp normal (mod = 1.00)
+  //   0.25-0.40  SPIKE UP    (mod climbs to 1.18 = +18% overshoot)
+  //   0.40-0.55  CRASH DOWN  (mod dives to 0.70 = -30% undershoot, long wick)
+  //   0.55-0.85  slow recover (mod eases back to 1.00)
+  //   0.85-1.00  hold
+  if (frac < 0.25) return 1.0;
+  if (frac < 0.40) {
+    const t = (frac - 0.25) / 0.15;
+    const s = t * t * (3 - 2 * t);
+    return 1.0 + 0.18 * s;
+  }
+  if (frac < 0.55) {
+    const t = (frac - 0.40) / 0.15;
+    const s = t * t * (3 - 2 * t);
+    return 1.18 - 0.48 * s; // 1.18 → 0.70
+  }
+  if (frac < 0.85) {
+    const t = (frac - 0.55) / 0.30;
+    const s = t * t * (3 - 2 * t);
+    return 0.70 + 0.30 * s; // 0.70 → 1.00
+  }
+  return 1.0;
+}
+
 for (let i = 0; i < PUMP_TICKS; i++) {
   const frac = i / (PUMP_TICKS - 1);
-  const mult = interpAnchors(liveAnchors, frac, 'mult');
-  const price = LIVE_START_PRICE * mult * noise(0.008);
+  const baseMult = interpAnchors(liveAnchors, frac, 'mult');
+  const mult = baseMult * dramaMod(frac);
+  const price = LIVE_START_PRICE * mult * noise(dramatic ? 0.015 : 0.008);
   const t = GOD_MINUTE_T + Math.round(frac * PUMP_DUR);
-  const dirSample = interpAnchors(liveAnchors, Math.min(1, frac + 0.04), 'mult') - mult;
+  const dirSample = interpAnchors(liveAnchors, Math.min(1, frac + 0.04), 'mult') - baseMult;
   const buyProb = dirSample > 0 ? 0.78 : 0.42;
   ticks.push({
     t, price,

@@ -102,21 +102,51 @@ function pickTarget(rng: () => number, prev: Target): Target {
     return roll < 0.5 ? { zoom: lerp(1.2, 1.3), pan: 0 } : { zoom: lerp(0.7, 0.8), pan: 0 };
   }
 
-  // Subtle gesture only — slight zoom-in or zoom-out to feel alive but not dramatic.
-  if (roll < 0.6) {
-    return { zoom: lerp(0.85, 0.93), pan: 0 }; // gentle zoom-in
+  // Trader behavior — leaning into the action, pinching to zoom, scrolling
+  // sideways to see more candles. Most gestures are zoom-ins (close-up on
+  // the live edge), with some finger pans and rare gentle dezooms.
+  //   55% close-up zoom (real lean-in)
+  //   20% medium zoom-in
+  //   18% finger pan (scroll history)
+  //    7% gentle zoom-out (peek context)
+  if (roll < 0.55) {
+    return { zoom: lerp(0.62, 0.78), pan: sign * lerp(0, 2) }; // big close-up
   }
-  return { zoom: lerp(1.07, 1.15), pan: 0 };   // gentle zoom-out
+  if (roll < 0.75) {
+    return { zoom: lerp(0.82, 0.92), pan: sign * lerp(0, 4) }; // smaller zoom-in
+  }
+  if (roll < 0.93) {
+    return { zoom: lerp(0.96, 1.06), pan: sign * lerp(7, 16) }; // pan finger swipe
+  }
+  return { zoom: lerp(1.08, 1.20), pan: sign * lerp(0, 3) };    // dezoom (rare)
 }
 
 export function buildCamera(opts: { totalFrames: number; fps: number }): CameraFrame[] {
   const { totalFrames, fps } = opts;
 
-  // Match reference: the camera is essentially STILL. One subtle gesture
-  // around the midpoint at most. No dramatic zooms.
+  // Human watching a chart: multiple small finger interactions across the clip.
+  // Traders rarely dezoom much — most gestures are small zoom-ins, micro pans
+  // (scrolling slightly to see more candles), and quick taps that almost-revert.
+  // ~1 gesture per 3 seconds of clip. Anchors are slightly biased toward the
+  // dramatic part of the timeline (35-85%) where price action happens.
   const rng = lcg(0xc0ffee);
-  const gestureCount = totalFrames < 8 * fps ? 0 : 1;
-  const anchors = gestureCount === 1 ? [0.55] : [];
+  const sec = totalFrames / fps;
+  const gestureCount =
+    sec < 4 ? 2 :
+    sec < 8 ? 3 :
+    sec < 14 ? 5 :
+    sec < 20 ? 6 :
+    7;
+  // Place gestures with a bias toward action (35-85% range gets denser).
+  const anchors = Array.from({ length: gestureCount }, (_, i) => {
+    const r = lcg(0xa11a + i)();
+    const base = (i + 0.5) / gestureCount;
+    // Skew toward the middle (where the pump rips) with a soft sigmoid bend.
+    const skewed = base < 0.5
+      ? 0.5 - Math.pow(0.5 - base, 1.3) * 1.0
+      : 0.5 + Math.pow(base - 0.5, 1.3) * 1.0;
+    return Math.min(0.94, Math.max(0.05, skewed + (r - 0.5) * 0.06));
+  });
 
   // Build gestures. Each has an optional pre-intention twitch (human hesitation).
   const gestures: Gesture[] = [];
@@ -144,10 +174,14 @@ export function buildCamera(opts: { totalFrames: number; fps: number }): CameraF
     prev = to;
   }
 
-  // Micro-drift: very subtle — just enough to not be pixel-frozen. Pan amplitude
-  // is tiny (0.06 candles) so it never reads as a chart scrolling left/right.
-  const driftZoom = (t: number) => 0.008 * Math.sin((2 * Math.PI * t) / 13.0 + 0.4);
-  const driftPan = (t: number) => 0.06 * Math.sin((2 * Math.PI * t) / 17.0 + 0.9);
+  // Hand-held phone wobble — two layered sines per axis so the motion never
+  // looks like a clean loop, plus a touch of zoom breathing.
+  const driftZoom = (t: number) =>
+    0.012 * Math.sin((2 * Math.PI * t) / 7.0 + 0.4) +
+    0.006 * Math.sin((2 * Math.PI * t) / 2.6 + 1.7);
+  const driftPan = (t: number) =>
+    0.45 * Math.sin((2 * Math.PI * t) / 9.0 + 0.9) +
+    0.20 * Math.sin((2 * Math.PI * t) / 3.1 + 2.4);
 
   // Single forward pass. The held target is whatever the most recent landed
   // gesture left us at; during a gesture we ease from its `from` to its `to`.

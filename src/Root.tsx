@@ -6,9 +6,17 @@ import { LiquidationMapCard } from "./vibe-cards/LiquidationMapCard";
 import { BigLiquidationCard } from "./vibe-cards/BigLiquidationCard";
 import { FundingArbCard } from "./vibe-cards/FundingArbCard";
 import { SpotFundingCardUS } from "./vibe-cards/markets/us/SpotFundingCard";
-import { SpotFundingCardCN } from "./vibe-cards/markets/cn/SpotFundingCard";
-import { SpotFundingCardKR } from "./vibe-cards/markets/kr/SpotFundingCard";
-import { SpotFundingCardJP } from "./vibe-cards/markets/jp/SpotFundingCard";
+// CJK cards lazy-loaded so their large Noto Sans font bundles only load when
+// the user actually renders one (not during pump-video renders).
+const SpotFundingCardCN = React.lazy(() =>
+  import("./vibe-cards/markets/cn/SpotFundingCard").then((m) => ({ default: m.SpotFundingCardCN })),
+);
+const SpotFundingCardKR = React.lazy(() =>
+  import("./vibe-cards/markets/kr/SpotFundingCard").then((m) => ({ default: m.SpotFundingCardKR })),
+);
+const SpotFundingCardJP = React.lazy(() =>
+  import("./vibe-cards/markets/jp/SpotFundingCard").then((m) => ({ default: m.SpotFundingCardJP })),
+);
 
 export const RemotionRoot: React.FC = () => {
   return (

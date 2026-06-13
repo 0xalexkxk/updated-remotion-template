@@ -1,0 +1,39 @@
+{
+  "name": "Dragon Worm",
+  "ticker": "DragonWorm",
+  "avatar": "dragonworm-avatar.jpg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Massive 26x pump $50K → $1.30M with peak wick at $1.40M. Matches dexscreener chart: morning chop in the $50K-$200K range, mid-day accumulation to $400K, then explosive vertical rip to $1.40M peak with the dramatic wick effect, settling at $1.30M.",
+
+  "history": {
+    "launchMcap": 20000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 20000 },
+      { "frac": 0.25, "mcap": 30000 },
+      { "frac": 0.50, "mcap": 35000 },
+      { "frac": 0.72, "mcap": 40000 },
+      { "frac": 0.90, "mcap": 45000 },
+      { "frac": 1.00, "mcap": 50000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 2.00 },
+      { "frac": 0.30, "mult": 6.00 },
+      { "frac": 0.50, "mult": 15.00 },
+      { "frac": 0.65, "mult": 24.00 },
+      { "frac": 0.80, "mult": 27.00 },
+      { "frac": 1.00, "mult": 26.00 }
+    ]
+  },
+
+  "poolLiquidity": 400000,
+  "dramaticCandle": true
+}

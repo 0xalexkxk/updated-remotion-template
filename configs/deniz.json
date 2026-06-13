@@ -1,0 +1,40 @@
+{
+  "name": "Justice For Deniz",
+  "ticker": "Deniz",
+  "avatar": "deniz-avatar.jpeg",
+
+  "duration": 14,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Pump $37K → $185K (5x) with resistance/dump pattern. History shows long flat accumulation at $5-15K visible on the left, then build-up to $37K right before the pump. Live god candle: rip up → spike to ~$220K → dump to ~$130K → slow recover to $185K (dramatic candle).",
+
+  "history": {
+    "launchMcap": 5000,
+    "candleCount": 200,
+    "pattern": [
+      { "frac": 0.00, "mcap": 5000 },
+      { "frac": 0.30, "mcap": 6000 },
+      { "frac": 0.55, "mcap": 8000 },
+      { "frac": 0.72, "mcap": 12000 },
+      { "frac": 0.85, "mcap": 22000 },
+      { "frac": 0.95, "mcap": 32000 },
+      { "frac": 1.00, "mcap": 37000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 1.80 },
+      { "frac": 0.30, "mult": 3.00 },
+      { "frac": 0.50, "mult": 4.30 },
+      { "frac": 0.70, "mult": 4.80 },
+      { "frac": 0.85, "mult": 4.95 },
+      { "frac": 1.00, "mult": 5.00 }
+    ]
+  },
+
+  "poolLiquidity": 80000,
+  "dramaticCandle": true
+}

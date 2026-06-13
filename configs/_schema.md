@@ -106,6 +106,7 @@ To override (rare — you really want consolidation): set `"allowConsolidation":
   // ── Optional knobs ──────────────────────────────────────────────────
   "poolLiquidity": 200000,             // dampens per-tick wiggle (bigger = smoother)
   "txRateBoost": 1.0,                  // 1.0 = default, 1.15 = 15% more transactions
+  "dramaticCandle": false,             // true → wild wick: spike up +18%, crash down -30%, slow recover
 
   // ── Escape hatch (rarely used) ──────────────────────────────────────
   "allowConsolidation": false          // set true to bypass pump-moment validation

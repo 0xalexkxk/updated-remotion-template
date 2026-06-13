@@ -1,0 +1,38 @@
+{
+  "name": "World Kintara Coin",
+  "ticker": "WORLDKINS",
+  "avatar": "worldkins-avatar.jpg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Massive 89x pump $7M → $623M with huge $1B wick. The reference chart shows tight zoom (only a few candles visible since the token JUST launched), so history is short — ~80 candles of pre-pump chop at low single-digit millions, then explosive live god candle with dramatic wick to ~$1B.",
+
+  "history": {
+    "launchMcap": 2000000,
+    "candleCount": 90,
+    "pattern": [
+      { "frac": 0.00, "mcap": 2000000 },
+      { "frac": 0.40, "mcap": 4000000 },
+      { "frac": 0.70, "mcap": 5500000 },
+      { "frac": 0.90, "mcap": 6500000 },
+      { "frac": 1.00, "mcap": 7000000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 5.00 },
+      { "frac": 0.30, "mult": 20.00 },
+      { "frac": 0.50, "mult": 60.00 },
+      { "frac": 0.65, "mult": 100.00 },
+      { "frac": 0.80, "mult": 140.00 },
+      { "frac": 1.00, "mult": 89.00 }
+    ]
+  },
+
+  "poolLiquidity": 1500000,
+  "dramaticCandle": true
+}
