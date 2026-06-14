@@ -1,0 +1,42 @@
+{
+  "name": "Bitcoin",
+  "ticker": "BTC",
+  "pair": "BTC-USDC",
+  "sub": "Bitcoin",
+  "leverage": "40x",
+  "chartTf": "15m",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Vibe perp DEMO — a gentle BTC-USDC chart matching the reference hump: clear fat blue/pink candles rising in a wave, NOT an extreme memecoin spike. Ends near 64,430 like the reference. allowConsolidation:true because perp charts move gently (the pump-moment validator is for the memecoin skin).",
+
+  "history": {
+    "launchMcap": 40000,
+    "candleCount": 60,
+    "pattern": [
+      { "frac": 0.00, "mcap": 40000 },
+      { "frac": 0.15, "mcap": 45000 },
+      { "frac": 0.32, "mcap": 53000 },
+      { "frac": 0.45, "mcap": 58000 },
+      { "frac": 0.60, "mcap": 53000 },
+      { "frac": 0.75, "mcap": 48000 },
+      { "frac": 0.90, "mcap": 51000 },
+      { "frac": 1.00, "mcap": 52000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.40, "mult": 1.12 },
+      { "frac": 0.70, "mult": 1.27 },
+      { "frac": 0.85, "mult": 1.20 },
+      { "frac": 1.00, "mult": 1.24 }
+    ]
+  },
+
+  "poolLiquidity": 5000000,
+  "allowConsolidation": true
+}

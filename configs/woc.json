@@ -1,0 +1,42 @@
+{
+  "name": "World Of Claudecraft",
+  "ticker": "WOC",
+  "avatar": "woc-avatar.jpeg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "8.9x pump $27K → $240K with peak wick at ~$260K. Long flat history (~30 hours from 12:00 Day 12 through Day 13 morning) at $10K-$35K visible on the left. Live god candle does the explosive rip with dramatic dump/recover wick.",
+
+  "history": {
+    "launchMcap": 10000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 10000 },
+      { "frac": 0.06, "mcap": 50000 },
+      { "frac": 0.10, "mcap": 25000 },
+      { "frac": 0.20, "mcap": 30000 },
+      { "frac": 0.40, "mcap": 28000 },
+      { "frac": 0.60, "mcap": 22000 },
+      { "frac": 0.78, "mcap": 25000 },
+      { "frac": 0.92, "mcap": 30000 },
+      { "frac": 1.00, "mcap": 27000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 2.50 },
+      { "frac": 0.30, "mult": 4.50 },
+      { "frac": 0.50, "mult": 6.50 },
+      { "frac": 0.65, "mult": 7.50 },
+      { "frac": 0.80, "mult": 9.50 },
+      { "frac": 1.00, "mult": 8.90 }
+    ]
+  },
+
+  "poolLiquidity": 350000,
+  "dramaticCandle": true
+}

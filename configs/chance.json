@@ -1,0 +1,46 @@
+{
+  "name": "Chancecoin",
+  "ticker": "CHANCE",
+  "avatar": "chance-avatar.jpg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Captures the final pump of the day: history shows the full ~16h dexscreener arc (launch → early peak $650K → long pullback to $280K → slow recovery to $360K), then live god candle RIPS from $360K to $720K with a high wick at $870K, like the chart shows.",
+
+  "history": {
+    "launchMcap": 50000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 50000 },
+      { "frac": 0.04, "mcap": 200000 },
+      { "frac": 0.10, "mcap": 350000 },
+      { "frac": 0.16, "mcap": 450000 },
+      { "frac": 0.22, "mcap": 650000 },
+      { "frac": 0.30, "mcap": 480000 },
+      { "frac": 0.40, "mcap": 400000 },
+      { "frac": 0.50, "mcap": 320000 },
+      { "frac": 0.58, "mcap": 280000 },
+      { "frac": 0.68, "mcap": 290000 },
+      { "frac": 0.80, "mcap": 330000 },
+      { "frac": 0.92, "mcap": 350000 },
+      { "frac": 1.00, "mcap": 360000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.20, "mult": 1.30 },
+      { "frac": 0.35, "mult": 1.10 },
+      { "frac": 0.55, "mult": 1.80 },
+      { "frac": 0.72, "mult": 2.40 },
+      { "frac": 0.85, "mult": 1.95 },
+      { "frac": 1.00, "mult": 2.00 }
+    ]
+  },
+
+  "poolLiquidity": 500000,
+  "dramaticCandle": true
+}

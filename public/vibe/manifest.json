@@ -1,0 +1,410 @@
+[
+  {
+    "file": "01_references/original_mobile_screenshot.png",
+    "size": [
+      590,
+      1280
+    ],
+    "description": "Original uploaded mobile reference screenshot, untouched."
+  },
+  {
+    "file": "01_references/original_desktop_chart_screenshot.png",
+    "size": [
+      2048,
+      1170
+    ],
+    "description": "Original uploaded desktop chart/orderbook reference screenshot, untouched."
+  },
+  {
+    "file": "01_references/mobile_app_area_reference.png",
+    "size": [
+      590,
+      1004
+    ],
+    "description": "Mobile app area cropped from the browser screenshot; useful as master reference for scaling."
+  },
+  {
+    "file": "02_mobile_components/top_header_full.png",
+    "size": [
+      590,
+      82
+    ],
+    "description": "Full top app header: Vibe logo, Connect button, and menu button."
+  },
+  {
+    "file": "02_mobile_components/market_selector_row_full.png",
+    "size": [
+      590,
+      71
+    ],
+    "description": "Market row with BTC-USDC selector, price area, and dropdown controls."
+  },
+  {
+    "file": "02_mobile_components/tab_switcher_full.png",
+    "size": [
+      570,
+      64
+    ],
+    "description": "Three-tab switcher with Chart active, Positions, and Orderbook."
+  },
+  {
+    "file": "02_mobile_components/chart_empty_area_full.png",
+    "size": [
+      590,
+      423
+    ],
+    "description": "Empty chart content area with the small loader mascot in the center."
+  },
+  {
+    "file": "02_mobile_components/trade_panel_full.png",
+    "size": [
+      590,
+      352
+    ],
+    "description": "Full visible trading panel from Buy/Sell toggle down to the bottom of the screenshot."
+  },
+  {
+    "file": "02_mobile_components/buy_sell_toggle_full.png",
+    "size": [
+      546,
+      58
+    ],
+    "description": "Buy/Sell segmented control with Buy active."
+  },
+  {
+    "file": "02_mobile_components/order_type_tabs_full.png",
+    "size": [
+      548,
+      50
+    ],
+    "description": "Market / Limit / More order type row with underline."
+  },
+  {
+    "file": "02_mobile_components/risk_mode_row.png",
+    "size": [
+      548,
+      40
+    ],
+    "description": "Risk mode row showing Cross selector."
+  },
+  {
+    "file": "02_mobile_components/leverage_slider_row.png",
+    "size": [
+      549,
+      81
+    ],
+    "description": "Leverage label, slider and 1x input box."
+  },
+  {
+    "file": "02_mobile_components/amount_row_visible.png",
+    "size": [
+      550,
+      62
+    ],
+    "description": "Visible top part of the Amount row and primary button area."
+  },
+  {
+    "file": "02_mobile_components/connect_button_component.png",
+    "size": [
+      103,
+      59
+    ],
+    "description": "Rounded blue Connect button crop."
+  },
+  {
+    "file": "02_mobile_components/menu_button_component.png",
+    "size": [
+      56,
+      56
+    ],
+    "description": "Rounded hamburger/menu button crop."
+  },
+  {
+    "file": "02_mobile_components/btc_usdc_selector_component.png",
+    "size": [
+      188,
+      47
+    ],
+    "description": "BTC-USDC selector block with coin icon, Bitcoin subtitle, 40x pill, and dropdown."
+  },
+  {
+    "file": "02_mobile_components/price_dropdown_component.png",
+    "size": [
+      153,
+      42
+    ],
+    "description": "Right-side price display with dropdown."
+  },
+  {
+    "file": "02_mobile_components/chart_tab_active_component.png",
+    "size": [
+      177,
+      45
+    ],
+    "description": "Active Chart tab button."
+  },
+  {
+    "file": "02_mobile_components/buy_button_active_component.png",
+    "size": [
+      271,
+      43
+    ],
+    "description": "Active blue Buy button."
+  },
+  {
+    "file": "02_mobile_components/sell_button_inactive_component.png",
+    "size": [
+      268,
+      43
+    ],
+    "description": "Inactive Sell button."
+  },
+  {
+    "file": "02_mobile_components/cross_selector_component.png",
+    "size": [
+      94,
+      34
+    ],
+    "description": "Cross risk selector with dropdown button."
+  },
+  {
+    "file": "02_mobile_components/leverage_value_component.png",
+    "size": [
+      99,
+      51
+    ],
+    "description": "1x leverage value box."
+  },
+  {
+    "file": "03_transparent_icons/vibe_logo_white_transparent.png",
+    "size": [
+      80,
+      31
+    ],
+    "description": "Vibe wordmark/logo isolated on transparent background."
+  },
+  {
+    "file": "03_transparent_icons/btc_coin_icon_transparent.png",
+    "size": [
+      35,
+      35
+    ],
+    "description": "Bitcoin coin icon isolated on transparent background."
+  },
+  {
+    "file": "03_transparent_icons/leverage_40x_pill_transparent.png",
+    "size": [
+      40,
+      25
+    ],
+    "description": "Small 40x leverage pill isolated on transparent background."
+  },
+  {
+    "file": "03_transparent_icons/asset_dropdown_square_transparent.png",
+    "size": [
+      34,
+      37
+    ],
+    "description": "Small market selector dropdown square isolated with transparent outside."
+  },
+  {
+    "file": "03_transparent_icons/price_dropdown_square_transparent.png",
+    "size": [
+      33,
+      37
+    ],
+    "description": "Small price dropdown square isolated with transparent outside."
+  },
+  {
+    "file": "03_transparent_icons/loader_mascot_transparent.png",
+    "size": [
+      58,
+      72
+    ],
+    "description": "Center loader/mascot isolated on transparent background."
+  },
+  {
+    "file": "03_transparent_icons/connect_button_transparent.png",
+    "size": [
+      103,
+      59
+    ],
+    "description": "Connect button with transparent outside corners."
+  },
+  {
+    "file": "03_transparent_icons/menu_button_transparent.png",
+    "size": [
+      56,
+      56
+    ],
+    "description": "Menu button with transparent outside corners."
+  },
+  {
+    "file": "03_transparent_icons/buy_button_active_transparent.png",
+    "size": [
+      275,
+      47
+    ],
+    "description": "Blue Buy button with transparent outside corners."
+  },
+  {
+    "file": "03_transparent_icons/sell_button_inactive_transparent.png",
+    "size": [
+      273,
+      47
+    ],
+    "description": "Dark Sell button with transparent outside corners."
+  },
+  {
+    "file": "05_desktop_assets/desktop_chart_full_panel.png",
+    "size": [
+      1555,
+      928
+    ],
+    "description": "Desktop chart panel crop from the reference, including toolbar, candles, volume, and axes."
+  },
+  {
+    "file": "05_desktop_assets/desktop_chart_plot_area.png",
+    "size": [
+      1392,
+      835
+    ],
+    "description": "Desktop plot area crop focused on candles and volume, without top platform header."
+  },
+  {
+    "file": "05_desktop_assets/desktop_orderbook_panel.png",
+    "size": [
+      419,
+      998
+    ],
+    "description": "Desktop orderbook panel crop from the right side of the reference."
+  },
+  {
+    "file": "05_desktop_assets/desktop_top_market_stats_bar.png",
+    "size": [
+      2048,
+      73
+    ],
+    "description": "Desktop top market stats/header bar crop."
+  },
+  {
+    "file": "05_desktop_assets/desktop_left_toolbar.png",
+    "size": [
+      70,
+      925
+    ],
+    "description": "Desktop left vertical toolbar crop."
+  },
+  {
+    "file": "04_chart_assets/mobile_chart_panel_mockup.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Mobile-sized chart panel with grid, candles, volume bars, and current price label, ready to paste into the blank chart area."
+  },
+  {
+    "file": "04_chart_assets/mobile_chart_grid_background.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Clean dark chart grid background with no candles or labels."
+  },
+  {
+    "file": "04_chart_assets/mobile_candles_overlay_transparent.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Transparent overlay containing only candlesticks and wicks."
+  },
+  {
+    "file": "04_chart_assets/mobile_volume_bars_overlay_transparent.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Transparent overlay containing only bottom volume bars."
+  },
+  {
+    "file": "04_chart_assets/mobile_chart_clean_no_price_label.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Mobile chart with grid/candles/volume but no top label or price tag."
+  },
+  {
+    "file": "04_chart_assets/mobile_orderbook_panel_mockup.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Mobile orderbook panel styled from the desktop reference, in the same size as the chart area."
+  },
+  {
+    "file": "04_chart_assets/mobile_positions_panel_empty_mockup.png",
+    "size": [
+      548,
+      408
+    ],
+    "description": "Mobile empty Positions panel mockup, same size as the chart area."
+  },
+  {
+    "file": "06_mock_screens/mobile_full_screen_with_chart_inserted.png",
+    "size": [
+      590,
+      1280
+    ],
+    "description": "Full mobile screenshot with the generated chart inserted into the blank chart area."
+  },
+  {
+    "file": "06_mock_screens/mobile_app_area_with_chart_inserted.png",
+    "size": [
+      590,
+      1004
+    ],
+    "description": "Cropped app-only version with generated chart inserted."
+  },
+  {
+    "file": "06_mock_screens/mobile_full_screen_orderbook_tab_mockup.png",
+    "size": [
+      590,
+      1280
+    ],
+    "description": "Full mobile screenshot mockup with Orderbook tab active and a mobile orderbook panel inserted."
+  },
+  {
+    "file": "06_mock_screens/mobile_full_screen_positions_tab_mockup.png",
+    "size": [
+      590,
+      1280
+    ],
+    "description": "Full mobile screenshot mockup with Positions tab active and an empty positions panel inserted."
+  },
+  {
+    "file": "06_mock_screens/mobile_clean_app_with_chart_590x1004.png",
+    "size": [
+      590,
+      1004
+    ],
+    "description": "App-only crop at 590×1004 for easier video composition without browser top/bottom chrome."
+  },
+  {
+    "file": "02_mobile_components/buy_sell_toggle_sell_active_mock.png",
+    "size": [
+      546,
+      58
+    ],
+    "description": "Generated segmented Buy/Sell control with Sell active for alternate video state."
+  },
+  {
+    "file": "01_references/vibe_theme_color_swatches.png",
+    "size": [
+      700,
+      160
+    ],
+    "description": "Theme color swatches sampled/approximated from the Vibe mobile interface."
+  }
+]

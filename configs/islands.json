@@ -1,0 +1,44 @@
+{
+  "name": "Islands",
+  "ticker": "Islands",
+  "avatar": "islands-avatar.jpeg",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "2.5x pump $130K → $330K with peak wick at ~$450K. Wide-zoom chart shows ~18h history: early-morning launch spike to $100K, drop to $30K, day-long chop $40K-$80K, slow accumulation to $130K, then explosive live god candle to $450K wick before settling at $330K.",
+
+  "history": {
+    "launchMcap": 15000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 15000 },
+      { "frac": 0.05, "mcap": 100000 },
+      { "frac": 0.10, "mcap": 30000 },
+      { "frac": 0.18, "mcap": 60000 },
+      { "frac": 0.28, "mcap": 90000 },
+      { "frac": 0.40, "mcap": 70000 },
+      { "frac": 0.55, "mcap": 60000 },
+      { "frac": 0.70, "mcap": 80000 },
+      { "frac": 0.85, "mcap": 105000 },
+      { "frac": 0.95, "mcap": 125000 },
+      { "frac": 1.00, "mcap": 130000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 1.50 },
+      { "frac": 0.30, "mult": 1.90 },
+      { "frac": 0.50, "mult": 2.30 },
+      { "frac": 0.65, "mult": 2.90 },
+      { "frac": 0.80, "mult": 3.46 },
+      { "frac": 1.00, "mult": 2.54 }
+    ]
+  },
+
+  "poolLiquidity": 400000,
+  "dramaticCandle": true
+}

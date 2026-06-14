@@ -1,0 +1,29 @@
+{
+  "name": "vibe-twitter-video-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion engine that renders Axiom-style memecoin-pump videos from real on-chain data",
+  "scripts": {
+    "dev": "remotion studio",
+    "studio": "remotion studio --port 3333",
+    "make": "node scripts/make.mjs",
+    "render": "node scripts/render.mjs",
+    "render:default": "remotion render src/index.ts PumpFunScreen out/PumpFunScreen.mp4",
+    "lint": "tsc",
+    "fetch": "node scripts/pumpfun/fetch.mjs",
+    "fetch:vibe": "node scripts/vibe/fetch.mjs",
+    "cards": "remotion still src/index.ts LiquidationMap out/liqmap.png && remotion still src/index.ts BigLiquidation out/bigliq.png && remotion still src/index.ts FundingArb out/fundingarb.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.438",
+    "@remotion/google-fonts": "4.0.438",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.438"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}

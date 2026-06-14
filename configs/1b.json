@@ -1,0 +1,41 @@
+{
+  "name": "Speedrun To 1 Billion",
+  "ticker": "1B",
+  "avatar": "1b-avatar.png",
+
+  "duration": 15,
+  "timeframe": "1m",
+  "language": "en",
+
+  "_comment": "Pump $450K → ~$2M peak (wick) → settle at $1.94M (4.3x). History shows long flat morning at low mcap → slow accumulation → ramp to $450K right before the live god candle. Dramatic candle creates the wick at the top.",
+
+  "history": {
+    "launchMcap": 30000,
+    "candleCount": 220,
+    "pattern": [
+      { "frac": 0.00, "mcap": 30000 },
+      { "frac": 0.25, "mcap": 35000 },
+      { "frac": 0.50, "mcap": 60000 },
+      { "frac": 0.65, "mcap": 130000 },
+      { "frac": 0.78, "mcap": 250000 },
+      { "frac": 0.88, "mcap": 360000 },
+      { "frac": 0.95, "mcap": 420000 },
+      { "frac": 1.00, "mcap": 450000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 1.60 },
+      { "frac": 0.30, "mult": 2.80 },
+      { "frac": 0.50, "mult": 3.80 },
+      { "frac": 0.65, "mult": 4.30 },
+      { "frac": 0.80, "mult": 4.40 },
+      { "frac": 1.00, "mult": 4.31 }
+    ]
+  },
+
+  "poolLiquidity": 600000,
+  "dramaticCandle": true
+}

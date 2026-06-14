@@ -1,0 +1,33 @@
+{
+  "name": "Trillion",
+  "ticker": "TRILLION",
+  "avatar": "trillion-avatar.png",
+
+  "duration": 20,
+  "timeframe": "1m",
+  "language": "zh",
+
+  "history": {
+    "launchMcap": 50000,
+    "candleCount": 90,
+    "pattern": [
+      { "frac": 0.00, "mcap": 50000 },
+      { "frac": 0.40, "mcap": 150000 },
+      { "frac": 0.55, "mcap": 200000 },
+      { "frac": 1.00, "mcap": 200000 }
+    ]
+  },
+
+  "livePump": {
+    "anchors": [
+      { "frac": 0.00, "mult": 1.00 },
+      { "frac": 0.15, "mult": 1.45 },
+      { "frac": 0.30, "mult": 1.30 },
+      { "frac": 0.65, "mult": 1.80 },
+      { "frac": 0.85, "mult": 1.60 },
+      { "frac": 1.00, "mult": 2.00 }
+    ]
+  },
+
+  "poolLiquidity": 200000
+}
